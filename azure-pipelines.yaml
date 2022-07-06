@@ -19,7 +19,7 @@ stages:
           - bash: ls $(System.DefaultWorkingDirectory)/terraform
 
           - task: TerraformTaskV2@2
-            displayName: 'Init'
+            displayName: 'Initiation'
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -34,9 +34,10 @@ stages:
           - task: TerraformTaskV2@2
             displayName: 'Apply'
             inputs:
+              provider: 'azurerm'
               command: 'apply'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-              allowTelemetryCollection: true
+              environmentServiceNameAzureRM: '$(serviceConn)'
 
 # stages:
 # - stage: Build
