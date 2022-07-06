@@ -23,7 +23,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
               backendServiceArm: '$(serviceConn)'
               backendAzureRmResourceGroupName: 'Azuredevops'
               backendAzureRmStorageAccountName: 'tungstorage989'
