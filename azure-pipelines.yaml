@@ -15,6 +15,7 @@ stages:
       - job: TerraformProvisionJob
         pool: $(poolName)
         steps:
+          - checkout: self
           - bash: ls $(System.DefaultWorkingDirectory)/terraform
 
           - task: TerraformTaskV2@2
