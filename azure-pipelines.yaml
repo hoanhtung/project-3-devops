@@ -38,33 +38,33 @@ stages:
   #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
   #             environmentServiceNameAzureRM: '$(serviceConn)'
 
-  # - stage: Build
-  #   displayName: Build stage
-  #   jobs:
-  #   - job: Build
-  #     pool: $(poolName)
-  #     steps:
-  #     - task: ArchiveFiles@2
-  #       displayName: 'Archive FakeRestAPI'
-  #       inputs:
-  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-  #         includeRootFolder: false
-  #         archiveType: 'zip'
-  #         archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
-  #     - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
-  #       displayName: 'Upload Fakerestapi Package'
-  #       artifact: drop-fakerestapi
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: Build
+      pool: $(poolName)
+      steps:
+      - task: ArchiveFiles@2
+        displayName: 'Archive FakeRestAPI'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
+        displayName: 'Upload Fakerestapi Package'
+        artifact: drop-fakerestapi
 
-  #     - task: ArchiveFiles@2
-  #       displayName: Archive Selenium
-  #       inputs:
-  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-  #         includeRootFolder: false
-  #         archiveType: 'zip'
-  #         archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
-  #     - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
-  #       displayName: 'Upload selenium Package'
-  #       artifact: drop-selenium
+      - task: ArchiveFiles@2
+        displayName: Archive Selenium
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
+        displayName: 'Upload selenium Package'
+        artifact: drop-selenium
 
   - stage: Deployment
     jobs:
