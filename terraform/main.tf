@@ -7,10 +7,10 @@ provider "azurerm" {
 }
 terraform {
   backend "azurerm" {
-    storage_account_name = "tungstorage989"
+    storage_account_name = "tungstorage4736"
     container_name       = "tungcontainer"
     key                  = "terraform.tfstate"
-    access_key           = "UMpLso2bhJiu7NR10oRo4i+V+GM6FOdyzMk4TWeu4bxNK+6ENMNsYFQ1pqR4pcULBAsDHziOzFw++ASt8wqhMw=="
+    access_key           = "LDoEp85YtJazRwVl5585FTPRPZAnq2/xsD+HzrVG13wAKzKpdQyqtun+wnuZDd4nP8+wV+BbuYQZ+AStYV5HHA=="
   }
 }
 // Uncomment because a resource group already exists (Azuredevops - use Azure Lab)
