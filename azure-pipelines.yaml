@@ -28,7 +28,7 @@ stages:
               backendAzureRmResourceGroupName: 'Azuredevops'
               backendAzureRmStorageAccountName: 'tungstorage989'
               backendAzureRmContainerName: 'tungcontainer'
-              backendAzureRmKey: 'terraform.tfstate'
+              backendAzureRmKey: 'tf/terraform.tfstate'
 
           - task: TerraformTaskV2@2
             displayName: 'Apply'
