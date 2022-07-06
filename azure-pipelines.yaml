@@ -15,7 +15,7 @@ stages:
       - job: TerraformProvisionJob
         pool: $(poolName)
         steps:
-          - bash: ls $(terraform-working-directory)
+          - bash: ls $(System.DefaultWorkingDirectory)/terraform
 
           - task: TerraformTaskV2@2
             displayName: 'Init'
