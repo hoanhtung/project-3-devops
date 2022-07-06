@@ -50,8 +50,8 @@ stages:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
-      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         displayName: 'Upload Fakerestapi Package'
         artifact: drop-fakerestapi
 
@@ -61,8 +61,8 @@ stages:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
-      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         displayName: 'Upload selenium Package'
         artifact: drop-selenium
 
