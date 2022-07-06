@@ -105,4 +105,26 @@ stages:
     #               pip3 install selenium
     #               export PATH=$PATH:some/path
 
-
+  - stage: Test
+    displayName: Test stage
+    jobs:
+    - job: PostmanTest
+      pool: $(poolName)
+      steps:
+      - script: |
+          npm install -g newman
+          npm install -g newman-reporter-junitfull
+          newman run "Regression Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
+          newman run "Validation Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
+        workingDirectory: $(projectRoot)/automatedtesting/postman/
+        displayName: "Run Postman"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(projectRoot)/automatedtesting/postman/validation-test.xml'
+        displayName: 'Publish Data Validation Tests Result'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
+        displayName: 'Publish Regression Tests Result'
