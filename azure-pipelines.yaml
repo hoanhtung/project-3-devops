@@ -9,34 +9,34 @@ variables:
   serviceConn: 'myserviceconn1234'
 
 stages:
-  - stage: Provision
-    displayName: Provision stage
-    jobs:
-      - job: TerraformProvisionJob
-        pool: $(poolName)
-        steps:
-          #Terraform Init
-          - task: TerraformTaskV2@2
-            displayName: 'Initiation'
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              commandOptions: '-reconfigure'
-              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-              backendServiceArm: '$(serviceConn)'
-              backendAzureRmResourceGroupName: 'Azuredevops'
-              backendAzureRmStorageAccountName: 'tungstorage989'
-              backendAzureRmContainerName: 'tungcontainer'
-              backendAzureRmKey: 'terraform.tfstate'
+  # - stage: Provision
+  #   displayName: Provision stage
+  #   jobs:
+  #     - job: TerraformProvisionJob
+  #       pool: $(poolName)
+  #       steps:
+  #         #Terraform Init
+  #         - task: TerraformTaskV2@2
+  #           displayName: 'Initiation'
+  #           inputs:
+  #             provider: 'azurerm'
+  #             command: 'init'
+  #             commandOptions: '-reconfigure'
+  #             workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+  #             backendServiceArm: '$(serviceConn)'
+  #             backendAzureRmResourceGroupName: 'Azuredevops'
+  #             backendAzureRmStorageAccountName: 'tungstorage989'
+  #             backendAzureRmContainerName: 'tungcontainer'
+  #             backendAzureRmKey: 'terraform.tfstate'
 
-          #Terraform Apply
-          - task: TerraformTaskV2@2
-            displayName: 'Apply'
-            inputs:
-              provider: 'azurerm'
-              command: 'apply'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-              environmentServiceNameAzureRM: '$(serviceConn)'
+  #         #Terraform Apply
+  #         - task: TerraformTaskV2@2
+  #           displayName: 'Apply'
+  #           inputs:
+  #             provider: 'azurerm'
+  #             command: 'apply'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+  #             environmentServiceNameAzureRM: '$(serviceConn)'
 
   - stage: Build
     displayName: Build stage
@@ -50,8 +50,8 @@ stages:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
         displayName: 'Upload Fakerestapi Package'
         artifact: drop-fakerestapi
 
@@ -61,8 +61,8 @@ stages:
           rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
         displayName: 'Upload selenium Package'
         artifact: drop-selenium
 
