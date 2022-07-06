@@ -15,9 +15,7 @@ stages:
       - job: TerraformProvisionJob
         pool: $(poolName)
         steps:
-          - checkout: self
-          - bash: ls $(System.DefaultWorkingDirectory)/terraform
-
+          #Terraform Init
           - task: TerraformTaskV2@2
             displayName: 'Initiation'
             inputs:
@@ -31,6 +29,7 @@ stages:
               backendAzureRmContainerName: 'tungcontainer'
               backendAzureRmKey: 'terraform.tfstate'
 
+          #Terraform Apply
           - task: TerraformTaskV2@2
             displayName: 'Apply'
             inputs:
@@ -39,68 +38,71 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               environmentServiceNameAzureRM: '$(serviceConn)'
 
-# stages:
-# - stage: Build
-#   jobs:
-#   - job: Build
-#     pool:
-#       name: $(poolName)
-#     steps:
-# #     Needed for Terraform VM deployment
-#      - task: InstallSSHKey@0
-#        inputs:
-#          knownHostsEntry: 'KNOWN_HOSTS_STRING'
-#          sshPublicKey: 'PUBLIC_KEY'
-#          sshKeySecureFile: 'id_rsa'
-#     - task: ArchiveFiles@2
-#       displayName: 'Archive FakeRestAPI'
-#       inputs:
-#         rootFolderOrFile: 'path/to/fakerestapi'
-#         includeRootFolder: false
-#         archiveType: 'zip'
-#         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
-#     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
-#       displayName: 'Upload Package'
-#       artifact: drop-fakerestapi
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: Build
+      pool: $(poolName)
+      steps:
+      - task: ArchiveFiles@2
+        displayName: 'Archive FakeRestAPI'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+        displayName: 'Upload Fakerestapi Package'
+        artifact: drop-fakerestapi
 
-# - stage: Deployment
-#   jobs:
-#   - deployment: FakeRestAPI
-#     pool:
-#       vmImage: 'Ubuntu-16.04'
-#     environment: 'TEST'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureWebApp@1
-#             displayName: 'Deploy Azure Web App'
-#             inputs:
-#               azureSubscription: ''
-#               appName: ''
-#               appType: webApp
-#               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-#   # - deployment: VMDeploy
-#   #   displayName: NAME
-#   #   environment:
-#   #     name:  ENVIRONMENT NAME
-#   #     resourceType: VirtualMachine
-#   #     tags: TAG NAME
-#   #   strategy:
-#   #     runOnce:
-#   #       deploy:
-#   #         steps:
-#   #         - task: Bash@3
-#   #           inputs:
-#   #             targetType: 'inline'
-#   #             script: |
-#   #               #! /bin/bash
+      - task: ArchiveFiles@2
+        displayName: Archive Selenium
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip'
+      - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-selenium.zip
+        displayName: 'Upload selenium Package'
+        artifact: drop-selenium
 
-#   #               sudo apt-get upgrade -y
-#   #               sudo apt-get install python3-pip -y
-#   #               sudo apt-get install unzip -y
-#   #               sudo apt-get install -y chromium-browser
-#   #               pip3 install selenium
-#   #               export PATH=$PATH:some/path
+  - stage: Deployment
+    jobs:
+    - deployment: FakeRestAPI
+      pool: $(poolName)
+      environment: 'TEST'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: AzureWebApp@1
+              displayName: 'Deploy Azure Web App'
+              inputs:
+                azureSubscription: '$(serviceConn)'
+                appName: 'hoanhtung-AppService'
+                appType: webApp
+                package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
+    # - deployment: VMDeploy
+    #   displayName: NAME
+    #   environment:
+    #     name:  ENVIRONMENT NAME
+    #     resourceType: VirtualMachine
+    #     tags: TAG NAME
+    #   strategy:
+    #     runOnce:
+    #       deploy:
+    #         steps:
+    #         - task: Bash@3
+    #           inputs:
+    #             targetType: 'inline'
+    #             script: |
+    #               #! /bin/bash
+
+    #               sudo apt-get upgrade -y
+    #               sudo apt-get install python3-pip -y
+    #               sudo apt-get install unzip -y
+    #               sudo apt-get install -y chromium-browser
+    #               pip3 install selenium
+    #               export PATH=$PATH:some/path
 
 
