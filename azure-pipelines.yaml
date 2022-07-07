@@ -111,10 +111,10 @@ stages:
     - job: PostmanTest
       pool: $(poolName)
       steps:
-      # - task: NodeTool@0
-      #   displayName: Install Node v12.X
-      #   inputs:
-      #     versionSpec: '12.x'
+      - task: NodeTool@0
+        displayName: Install Node v12.X
+        inputs:
+          versionSpec: '12.x'
       - bash: |
           npm install -g newman
           npm install -g newman-reporter-junitfull
