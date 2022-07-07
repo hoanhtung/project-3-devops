@@ -7,9 +7,9 @@ import datetime
 #driver = webdriver.Chrome()
 options = ChromeOptions()
 options.add_argument('--headless')
-# options.add_argument('--no-sandbox')
+options.add_argument('--no-sandbox')
 # options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome('/home/tungudacity/myagent/bin/chromedriver', options=options)
+driver = webdriver.Chrome(options=options)
 
 def timestamp():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
