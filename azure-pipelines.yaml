@@ -133,17 +133,17 @@ stages:
     #       testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
     #     displayName: 'Publish Regression Tests Result'
 
-    - job: JmeterTestJob
-      pool: $(poolName)
-      steps:
-        - task: JMeterInstaller@0
-          inputs:
-            jmeterVersion: '5.4.2'
-        - script: |
-            jmeter -n -t EnduranceTest.jmx -e -f -o endurance-html-report -l endurance-test-result.csv
-          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
-          displayName: "Run endurance test"
-        - script: |
-            jmeter -n -t StressTest.jmx -e -f -o stress-html-report -l stress-test-result.csv
-          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
-          displayName: "Run stress test"
+#    - job: JmeterTestJob
+#      pool: $(poolName)
+#      steps:
+#        - task: JMeterInstaller@0
+#          inputs:
+#            jmeterVersion: '5.4.2'
+#        - script: |
+#            jmeter -n -t EnduranceTest.jmx -e -f -o endurance-html-report -l endurance-test-result.csv
+#          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+#          displayName: "Run endurance test"
+#        - script: |
+#            jmeter -n -t StressTest.jmx -e -f -o stress-html-report -l stress-test-result.csv
+#          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+#          displayName: "Run stress test"
