@@ -9,79 +9,79 @@ variables:
   serviceConn: 'myserviceconn1234'
 
 stages:
-  - stage: Provision
-    displayName: Provision stage
-    jobs:
-      - job: TerraformProvisionJob
-        pool: $(poolName)
-        steps:
-          #Terraform Init
-          - task: TerraformTaskV2@2
-            displayName: 'Initiation'
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              commandOptions: '-reconfigure'
-              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-              backendServiceArm: '$(serviceConn)'
-              backendAzureRmResourceGroupName: 'Azuredevops'
-              backendAzureRmStorageAccountName: 'tungstorage4736'
-              backendAzureRmContainerName: 'tungcontainer'
-              backendAzureRmKey: 'terraform.tfstate'
+  # - stage: Provision
+  #   displayName: Provision stage
+  #   jobs:
+  #     - job: TerraformProvisionJob
+  #       pool: $(poolName)
+  #       steps:
+  #         #Terraform Init
+  #         - task: TerraformTaskV2@2
+  #           displayName: 'Initiation'
+  #           inputs:
+  #             provider: 'azurerm'
+  #             command: 'init'
+  #             commandOptions: '-reconfigure'
+  #             workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+  #             backendServiceArm: '$(serviceConn)'
+  #             backendAzureRmResourceGroupName: 'Azuredevops'
+  #             backendAzureRmStorageAccountName: 'tungstorage4736'
+  #             backendAzureRmContainerName: 'tungcontainer'
+  #             backendAzureRmKey: 'terraform.tfstate'
 
-          #Terraform Apply
-          - task: TerraformTaskV2@2
-            displayName: 'Apply'
-            inputs:
-              provider: 'azurerm'
-              command: 'apply'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-              environmentServiceNameAzureRM: '$(serviceConn)'
+  #         #Terraform Apply
+  #         - task: TerraformTaskV2@2
+  #           displayName: 'Apply'
+  #           inputs:
+  #             provider: 'azurerm'
+  #             command: 'apply'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+  #             environmentServiceNameAzureRM: '$(serviceConn)'
 
-  - stage: Build
-    displayName: Build stage
-    jobs:
-    - job: Build
-      pool: $(poolName)
-      steps:
-      - task: ArchiveFiles@2
-        displayName: 'Archive FakeRestAPI'
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-          includeRootFolder: false
-          archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
-      - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
-        displayName: 'Upload Fakerestapi Package'
-        artifact: drop-fakerestapi
+  # - stage: Build
+  #   displayName: Build stage
+  #   jobs:
+  #   - job: Build
+  #     pool: $(poolName)
+  #     steps:
+  #     - task: ArchiveFiles@2
+  #       displayName: 'Archive FakeRestAPI'
+  #       inputs:
+  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+  #         includeRootFolder: false
+  #         archiveType: 'zip'
+  #         archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
+  #     - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
+  #       displayName: 'Upload Fakerestapi Package'
+  #       artifact: drop-fakerestapi
 
-      - task: ArchiveFiles@2
-        displayName: Archive Selenium
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-          includeRootFolder: false
-          archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
-      - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
-        displayName: 'Upload selenium Package'
-        artifact: drop-selenium
+  #     - task: ArchiveFiles@2
+  #       displayName: Archive Selenium
+  #       inputs:
+  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+  #         includeRootFolder: false
+  #         archiveType: 'zip'
+  #         archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
+  #     - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
+  #       displayName: 'Upload selenium Package'
+  #       artifact: drop-selenium
 
-  - stage: Deployment
-    jobs:
-    - deployment: FakeRestAPI
-      pool: $(poolName)
-      environment: 'TEST'
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - task: AzureWebApp@1
-              displayName: 'Deploy Azure Web App'
-              inputs:
-                azureSubscription: '$(serviceConn)'
-                appName: 'hoanhtung-AppService'
-                appType: webApp
-                package: $(Pipeline.Workspace)/drop-fakerestapi/fakerestapi-$(Build.BuildId).zip
+  # - stage: Deployment
+  #   jobs:
+  #   - deployment: FakeRestAPI
+  #     pool: $(poolName)
+  #     environment: 'TEST'
+  #     strategy:
+  #       runOnce:
+  #         deploy:
+  #           steps:
+  #           - task: AzureWebApp@1
+  #             displayName: 'Deploy Azure Web App'
+  #             inputs:
+  #               azureSubscription: '$(serviceConn)'
+  #               appName: 'hoanhtung-AppService'
+  #               appType: webApp
+  #               package: $(Pipeline.Workspace)/drop-fakerestapi/fakerestapi-$(Build.BuildId).zip
     # - deployment: VMDeploy
     #   displayName: NAME
     #   environment:
