@@ -132,3 +132,18 @@ stages:
           testResultsFormat: 'JUnit'
           testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
         displayName: 'Publish Regression Tests Result'
+
+    - job: JmeterJob
+      pool: $(poolName)
+      steps:
+        - task: JMeterInstaller@0
+          inputs:
+            jmeterVersion: '5.4.2'
+        - script: |
+            jmeter -n -t EnduranceTest.jmx -e -o endurance.html -l endurance-test-result.csv
+          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+          displayName: "Run endurance test"
+        - script: |
+            jmeter -n -t StressTest.jmx -e -o stress.html -l stress-test-result.csv
+          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+          displayName: "Run stress test"
