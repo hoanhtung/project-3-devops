@@ -132,7 +132,30 @@ stages:
     #       testResultsFormat: 'JUnit'
     #       testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
     #     displayName: 'Publish Regression Tests Result'
-
+    - job: SeleniumJob
+      pool: $(poolName)
+      steps:
+      - task: ArchiveFiles@2
+        inputs:
+          rootFolderOrFile: '$(projectRoot)/automatedtesting/selenium/'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'hoanhtung-web'
+          sourceFolder: '$(Build.ArtifactStagingDirectory)'
+          contents: 'selenium-$(Build.BuildId).zip'
+          readyTimeout: '20000'
+      - task: SSH@0
+        inputs:
+          sshEndpoint: 'hoanhtung-web'
+          runOptions: 'commands'
+          commands: |
+            #! /bin/bash
+            unzip -o selenium-$(Build.BuildId).zip
+            python3 login.py
+          readyTimeout: '20000'
 #    - job: JmeterTestJob
 #      pool: $(poolName)
 #      steps:
