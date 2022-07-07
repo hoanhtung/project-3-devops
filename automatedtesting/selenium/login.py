@@ -27,22 +27,22 @@ def login (user, password):
     driver.find_element(By.ID, "login-button").click()
     print (timestamp(), 'User logged in: ' + user)
 
-# def addToCart():
-#     print (timestamp(), 'Add to cart')
-#     inventory_list = driver.find_elements(By.CLASS_NAME, "inventory_item")
-#     for inventory_item in inventory_list:
-#         print(timestamp(), 'Add item to cart: ' + inventory_item.find_element(By.CLASS_NAME, "inventory_item_name").text)
-#         inventory_item.find_element(By.XPATH, ".//div[@class='pricebar']/button").click()
-#
-# def removeFromCart():
-#     print (timestamp(), 'Remove from cart')
-#     driver.get('https://www.saucedemo.com/cart.html')
-#     cart_list = driver.find_elements(By.CLASS_NAME, "cart_item")
-#     for cart_item in cart_list:
-#         print(timestamp(), 'Remove item from cart: ' + cart_item.find_element(By.CLASS_NAME, "inventory_item_name").text)
-#         cart_item.find_element(By.XPATH, ".//div[@class='item_pricebar']/button").click()
+def addToCart():
+    print (timestamp(), 'Add to cart')
+    inventory_list = driver.find_elements(By.CLASS_NAME, "inventory_item")
+    for inventory_item in inventory_list:
+        print(timestamp(), 'Add item to cart: ' + inventory_item.find_element(By.CLASS_NAME, "inventory_item_name").text)
+        inventory_item.find_element(By.XPATH, ".//div[@class='pricebar']/button").click()
+
+def removeFromCart():
+    print (timestamp(), 'Remove from cart')
+    driver.get('https://www.saucedemo.com/cart.html')
+    cart_list = driver.find_elements(By.CLASS_NAME, "cart_item")
+    for cart_item in cart_list:
+        print(timestamp(), 'Remove item from cart: ' + cart_item.find_element(By.CLASS_NAME, "inventory_item_name").text)
+        cart_item.find_element(By.XPATH, ".//div[@class='item_pricebar']/button").click()
 
 login('standard_user', 'secret_sauce')
-# addToCart()
-# removeFromCart()
+addToCart()
+removeFromCart()
 
