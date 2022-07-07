@@ -4,10 +4,10 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 import datetime
 
-#driver = webdriver.Chrome()
-options = ChromeOptions()
-options.add_argument("--headless")
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome()
+# options = ChromeOptions()
+# options.add_argument("--headless")
+# driver = webdriver.Chrome(options=options)
 
 def timestamp():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
