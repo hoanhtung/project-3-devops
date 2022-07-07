@@ -9,34 +9,34 @@ variables:
   serviceConn: 'myserviceconn1234'
 
 stages:
-  # - stage: Provision
-  #   displayName: Provision stage
-  #   jobs:
-  #     - job: TerraformProvisionJob
-  #       pool: $(poolName)
-  #       steps:
-  #         #Terraform Init
-  #         - task: TerraformTaskV2@2
-  #           displayName: 'Initiation'
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'init'
-  #             commandOptions: '-reconfigure'
-  #             workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-  #             backendServiceArm: '$(serviceConn)'
-  #             backendAzureRmResourceGroupName: 'Azuredevops'
-  #             backendAzureRmStorageAccountName: 'tungstorage989'
-  #             backendAzureRmContainerName: 'tungcontainer'
-  #             backendAzureRmKey: 'terraform.tfstate'
+  - stage: Provision
+    displayName: Provision stage
+    jobs:
+      - job: TerraformProvisionJob
+        pool: $(poolName)
+        steps:
+          #Terraform Init
+          - task: TerraformTaskV2@2
+            displayName: 'Initiation'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              # commandOptions: '-reconfigure'
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+              backendServiceArm: '$(serviceConn)'
+              backendAzureRmResourceGroupName: 'Azuredevops'
+              backendAzureRmStorageAccountName: 'tungstorage4736'
+              backendAzureRmContainerName: 'tungcontainer'
+              backendAzureRmKey: 'terraform.tfstate'
 
-  #         #Terraform Apply
-  #         - task: TerraformTaskV2@2
-  #           displayName: 'Apply'
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'apply'
-  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-  #             environmentServiceNameAzureRM: '$(serviceConn)'
+          #Terraform Apply
+          - task: TerraformTaskV2@2
+            displayName: 'Apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              environmentServiceNameAzureRM: '$(serviceConn)'
 
   - stage: Build
     displayName: Build stage
@@ -105,26 +105,26 @@ stages:
     #               pip3 install selenium
     #               export PATH=$PATH:some/path
 
-  - stage: Test
-    displayName: Test stage
-    jobs:
-    - job: PostmanTest
-      pool: $(poolName)
-      steps:
-      - script: |
-          npm install -g newman
-          npm install -g newman-reporter-junitfull
-          newman run "Regression Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
-          newman run "Validation Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
-        workingDirectory: $(projectRoot)/automatedtesting/postman/
-        displayName: "Run Postman"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '$(projectRoot)/automatedtesting/postman/validation-test.xml'
-        displayName: 'Publish Data Validation Tests Result'
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
-        displayName: 'Publish Regression Tests Result'
+  # - stage: Test
+  #   displayName: Test stage
+  #   jobs:
+  #   - job: PostmanTest
+  #     pool: $(poolName)
+  #     steps:
+  #     - script: |
+  #         npm install -g newman
+  #         npm install -g newman-reporter-junitfull
+  #         newman run "Regression Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
+  #         newman run "Validation Test.postman_collection.json" -e myenv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
+  #       workingDirectory: $(projectRoot)/automatedtesting/postman/
+  #       displayName: "Run Postman"
+  #     - task: PublishTestResults@2
+  #       inputs:
+  #         testResultsFormat: 'JUnit'
+  #         testResultsFiles: '$(projectRoot)/automatedtesting/postman/validation-test.xml'
+  #       displayName: 'Publish Data Validation Tests Result'
+  #     - task: PublishTestResults@2
+  #       inputs:
+  #         testResultsFormat: 'JUnit'
+  #         testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
+  #       displayName: 'Publish Regression Tests Result'
