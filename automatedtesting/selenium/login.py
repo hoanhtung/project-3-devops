@@ -2,7 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
-from datetime import datetime, timezone
+import datetime
 
 #driver = webdriver.Chrome()
 options = ChromeOptions()
