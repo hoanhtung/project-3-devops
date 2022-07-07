@@ -9,107 +9,107 @@ variables:
   serviceConn: 'myserviceconn1234'
 
 stages:
-  # - stage: Provision
-  #   displayName: Provision stage
-  #   jobs:
-  #     - job: TerraformProvisionJob
-  #       pool: $(poolName)
-  #       steps:
-  #         #Terraform Init
-  #         - task: TerraformTaskV2@2
-  #           displayName: 'Initiation'
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'init'
-  #             commandOptions: '-reconfigure'
-  #             workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-  #             backendServiceArm: '$(serviceConn)'
-  #             backendAzureRmResourceGroupName: 'Azuredevops'
-  #             backendAzureRmStorageAccountName: 'tungstorage4736'
-  #             backendAzureRmContainerName: 'tungcontainer'
-  #             backendAzureRmKey: 'terraform.tfstate'
+  - stage: Provision
+    displayName: Provision stage
+    jobs:
+      - job: TerraformProvisionJob
+        pool: $(poolName)
+        steps:
+          #Terraform Init
+          - task: TerraformTaskV2@2
+            displayName: 'Initiation'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              commandOptions: '-reconfigure'
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+              backendServiceArm: '$(serviceConn)'
+              backendAzureRmResourceGroupName: 'Azuredevops'
+              backendAzureRmStorageAccountName: 'tungstorage4736'
+              backendAzureRmContainerName: 'tungcontainer'
+              backendAzureRmKey: 'terraform.tfstate'
 
-  #         #Terraform Apply
-  #         - task: TerraformTaskV2@2
-  #           displayName: 'Apply'
-  #           inputs:
-  #             provider: 'azurerm'
-  #             command: 'apply'
-  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-  #             environmentServiceNameAzureRM: '$(serviceConn)'
+          #Terraform Apply
+          - task: TerraformTaskV2@2
+            displayName: 'Apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              environmentServiceNameAzureRM: '$(serviceConn)'
 
-  # - stage: Build
-  #   displayName: Build stage
-  #   jobs:
-  #   - job: Build
-  #     pool: $(poolName)
-  #     steps:
-  #     - task: ArchiveFiles@2
-  #       displayName: 'Archive FakeRestAPI'
-  #       inputs:
-  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
-  #         includeRootFolder: false
-  #         archiveType: 'zip'
-  #         archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
-  #     - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
-  #       displayName: 'Upload Fakerestapi Package'
-  #       artifact: drop-fakerestapi
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: Build
+      pool: $(poolName)
+      steps:
+      - task: ArchiveFiles@2
+        displayName: 'Archive FakeRestAPI'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/jmeter/fakerestapi'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/fakerestapi-$(Build.BuildId).zip
+        displayName: 'Upload Fakerestapi Package'
+        artifact: drop-fakerestapi
 
-  #     - task: ArchiveFiles@2
-  #       displayName: Archive Selenium
-  #       inputs:
-  #         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
-  #         includeRootFolder: false
-  #         archiveType: 'zip'
-  #         archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
-  #     - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
-  #       displayName: 'Upload selenium Package'
-  #       artifact: drop-selenium
+      - task: ArchiveFiles@2
+        displayName: Archive Selenium
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/automatedtesting/selenium'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
+      - publish: $(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip
+        displayName: 'Upload selenium Package'
+        artifact: drop-selenium
 
-  # - stage: Deployment
-  #   jobs:
-  #   - deployment: FakeRestAPI
-  #     pool: $(poolName)
-  #     environment: 'TEST'
-  #     strategy:
-  #       runOnce:
-  #         deploy:
-  #           steps:
-  #           - task: AzureWebApp@1
-  #             displayName: 'Deploy Azure Web App'
-  #             inputs:
-  #               azureSubscription: '$(serviceConn)'
-  #               appName: 'hoanhtung-AppService'
-  #               appType: webApp
-  #               package: $(Pipeline.Workspace)/drop-fakerestapi/fakerestapi-$(Build.BuildId).zip
+  - stage: Deployment
+    jobs:
+    - deployment: FakeRestAPI
+      pool: $(poolName)
+      environment: 'TEST'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: AzureWebApp@1
+              displayName: 'Deploy Azure Web App'
+              inputs:
+                azureSubscription: '$(serviceConn)'
+                appName: 'hoanhtung-AppService'
+                appType: webApp
+                package: $(Pipeline.Workspace)/drop-fakerestapi/fakerestapi-$(Build.BuildId).zip
 
   - stage: Test
     displayName: Test stage
     jobs:
-    # - job: PostmanTestJob
-    #   pool: $(poolName)
-    #   steps:
-    #   - task: NodeTool@0
-    #     displayName: Install Node v12.X
-    #     inputs:
-    #       versionSpec: '12.x'
-    #   - bash: |
-    #       npm install -g newman
-    #       npm install -g newman-reporter-junitfull
-    #       newman run "RegressionTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
-    #       newman run "DataValidationTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
-    #     workingDirectory: $(projectRoot)/automatedtesting/postman/
-    #     displayName: "Run Postman"
-    #   - task: PublishTestResults@2
-    #     inputs:
-    #       testResultsFormat: 'JUnit'
-    #       testResultsFiles: '$(projectRoot)/automatedtesting/postman/validation-test.xml'
-    #     displayName: 'Publish Data Validation Tests Result'
-    #   - task: PublishTestResults@2
-    #     inputs:
-    #       testResultsFormat: 'JUnit'
-    #       testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
-    #     displayName: 'Publish Regression Tests Result'
+    - job: PostmanTestJob
+      pool: $(poolName)
+      steps:
+      - task: NodeTool@0
+        displayName: Install Node v12.X
+        inputs:
+          versionSpec: '12.x'
+      - bash: |
+          npm install -g newman
+          npm install -g newman-reporter-junitfull
+          newman run "RegressionTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
+          newman run "DataValidationTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
+        workingDirectory: $(projectRoot)/automatedtesting/postman/
+        displayName: "Run Postman"
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(projectRoot)/automatedtesting/postman/validation-test.xml'
+        displayName: 'Publish Data Validation Tests Result'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
+        displayName: 'Publish Regression Tests Result'
     - job: SeleniumJob
       pool: $(poolName)
       steps:
@@ -135,17 +135,17 @@ stages:
             python3 login.py
           readyTimeout: '20000'
           
-#    - job: JmeterTestJob
-#      pool: $(poolName)
-#      steps:
-#        - task: JMeterInstaller@0
-#          inputs:
-#            jmeterVersion: '5.4.2'
-#        - script: |
-#            jmeter -n -t EnduranceTest.jmx -e -f -o endurance-html-report -l endurance-test-result.csv
-#          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
-#          displayName: "Run endurance test"
-#        - script: |
-#            jmeter -n -t StressTest.jmx -e -f -o stress-html-report -l stress-test-result.csv
-#          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
-#          displayName: "Run stress test"
+    - job: JmeterTestJob
+      pool: $(poolName)
+      steps:
+        - task: JMeterInstaller@0
+          inputs:
+            jmeterVersion: '5.4.2'
+        - script: |
+            jmeter -n -t EnduranceTest.jmx -e -f -o endurance-html-report -l endurance-test-result.csv
+          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+          displayName: "Run endurance test"
+        - script: |
+            jmeter -n -t StressTest.jmx -e -f -o stress-html-report -l stress-test-result.csv
+          workingDirectory: $(projectRoot)/automatedtesting/jmeter/
+          displayName: "Run stress test"
