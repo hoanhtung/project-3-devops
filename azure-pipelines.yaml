@@ -121,13 +121,13 @@ stages:
           archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
       - task: CopyFilesOverSSH@0
         inputs:
-          sshEndpoint: 'hoanhtung-vm'
+          sshEndpoint: 'hoanhtung-web'
           sourceFolder: '$(Build.ArtifactStagingDirectory)'
           contents: 'selenium-$(Build.BuildId).zip'
           readyTimeout: '20000'
       - task: SSH@0
         inputs:
-          sshEndpoint: 'hoanhtung-vm'
+          sshEndpoint: 'hoanhtung-web'
           runOptions: 'commands'
           commands: |
             #! /bin/bash
