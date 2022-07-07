@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "76f3f6d0-c7ad-4f0c-8eb6-b66f08b4b859",
+		"name": "DataValidationTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validation Data\", ",
+							"    function () {",
+							"        var json = pm.response.json();",
+							"\t    pm.expect(json).to.have.property('ID');",
+							"        pm.expect(json).to.have.property('Title');",
+							"        pm.expect(json).to.have.property('DueDate');",
+							"        pm.expect(json).to.have.property('Completed');",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ID\": \"31\",\n  \"Title\": \"{{title}}\",\n  \"DueDate\": \"{{duedate}}\",\n  \"Completed\": \"{{completed}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/Activities",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Activities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = pm.response.json();",
+							"pm.test(\"Validation Data\", ",
+							"    function () {",
+							"        for (let i = 0; i < json.length; i++) {",
+							"            pm.expect(json[i]).to.have.property('ID');",
+							"            pm.expect(json[i]).to.have.property('Title');",
+							"            pm.expect(json[i]).to.have.property('DueDate');",
+							"            pm.expect(json[i]).to.have.property('Completed');",
+							"        }",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Activities",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Activity Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validation Data\", ",
+							"    function () {",
+							"        var json = pm.response.json();",
+							"\t    pm.expect(json).to.have.property('ID');",
+							"        pm.expect(json).to.have.property('Title');",
+							"        pm.expect(json).to.have.property('DueDate');",
+							"        pm.expect(json).to.have.property('Completed');",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/Activities/{{testactivityid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Activities",
+						"{{testactivityid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validation Data\", ",
+							"    function () {",
+							"        var json = pm.response.json();",
+							"\t    pm.expect(json).to.have.property('ID');",
+							"        pm.expect(json).to.have.property('Title');",
+							"        pm.expect(json).to.have.property('DueDate');",
+							"        pm.expect(json).to.have.property('Completed');",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ID\": {{testactivityid}},\n  \"Title\": \"{{title}}\",\n  \"DueDate\": \"{{duedate}}\",\n  \"Completed\": \"{{completed}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/Activities/{{testactivityid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Activities",
+						"{{testactivityid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validation Data\", ",
+							"    function () {});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/Activities/{{testactivityid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"Activities",
+						"{{testactivityid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
