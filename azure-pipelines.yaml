@@ -108,7 +108,7 @@ stages:
   - stage: Test
     displayName: Test stage
     jobs:
-    - job: PostmanTest
+    - job: PostmanTestJob
       pool: $(poolName)
       steps:
       - task: NodeTool@0
@@ -133,7 +133,7 @@ stages:
           testResultsFiles: '$(projectRoot)/automatedtesting/postman/regression-test.xml'
         displayName: 'Publish Regression Tests Result'
 
-    - job: JmeterJob
+    - job: JmeterTestJob
       pool: $(poolName)
       steps:
         - task: JMeterInstaller@0
