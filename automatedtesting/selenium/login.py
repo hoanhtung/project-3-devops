@@ -6,7 +6,7 @@ import datetime
 
 #driver = webdriver.Chrome()
 options = ChromeOptions()
-options.add_argument("--headless")
+options.add_argument("--headless").add_argument("--disable-dev-shm-usage")
 driver = webdriver.Chrome(options=options)
 
 def timestamp():
