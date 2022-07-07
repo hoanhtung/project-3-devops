@@ -112,7 +112,6 @@ stages:
       pool: $(poolName)
       steps:
       - script: |
-          sudo apt install npm nodejs
           npm install -g newman
           npm install -g newman-reporter-junitfull
           newman run "RegressionTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
