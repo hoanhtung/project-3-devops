@@ -111,9 +111,13 @@ stages:
     - job: PostmanTest
       pool: $(poolName)
       steps:
-      - script: |
-          npm install newman
-          npm install newman-reporter-junitfull
+      # - task: NodeTool@0
+      #   displayName: Install Node v12.X
+      #   inputs:
+      #     versionSpec: '12.x'
+      - bash: |
+          npm install -g newman
+          npm install -g newman-reporter-junitfull
           newman run "RegressionTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export regression-test.xml
           newman run "DataValidationTest.postman_collection.json" -e MyEnv.postman_environment.json --reporters cli,junitfull --reporter-junitfull-export validation-test.xml
         workingDirectory: $(projectRoot)/automatedtesting/postman/
