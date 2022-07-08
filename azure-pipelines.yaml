@@ -16,13 +16,15 @@ stages:
     pool: $(poolName)
     steps:
       #Terraform Init
+    - bash: ls $(projectRoot)
+
     - task: TerraformTaskV2@2
       displayName: 'Initiation'
       inputs:
         provider: 'azurerm'
         command: 'init'
         commandOptions: '-reconfigure'
-        workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+        workingDirectory: $(projectRoot)/terraform
         backendServiceArm: '$(serviceConn)'
         backendAzureRmResourceGroupName: 'Azuredevops'
         backendAzureRmStorageAccountName: 'tungstorage12343'
