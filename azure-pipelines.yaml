@@ -1,5 +1,5 @@
 trigger:
-  - main
+- main
 
 name: Azure Pipelines
 variables:
@@ -12,31 +12,31 @@ stages:
 - stage: Provision
   displayName: Provision stage
   jobs:
-    - job: TerraformProvisionJob
-      pool: $(poolName)
-      steps:
-        #Terraform Init
-      - task: TerraformTaskV2@2
-        displayName: 'Initiation'
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          commandOptions: '-reconfigure'
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-          backendServiceArm: '$(serviceConn)'
-          backendAzureRmResourceGroupName: 'Azuredevops'
-          backendAzureRmStorageAccountName: 'tungstorage12343'
-          backendAzureRmContainerName: 'tungcontainer'
-          backendAzureRmKey: 'terraform.tfstate'
+  - job: TerraformProvisionJob
+    pool: $(poolName)
+    steps:
+      #Terraform Init
+    - task: TerraformTaskV2@2
+      displayName: 'Initiation'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        commandOptions: '-reconfigure'
+        workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+        backendServiceArm: '$(serviceConn)'
+        backendAzureRmResourceGroupName: 'Azuredevops'
+        backendAzureRmStorageAccountName: 'tungstorage12343'
+        backendAzureRmContainerName: 'tungcontainer'
+        backendAzureRmKey: 'terraform.tfstate'
 
-      #Terraform Apply
-      - task: TerraformTaskV2@2
-        displayName: 'Apply'
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-          environmentServiceNameAzureRM: '$(serviceConn)'
+    #Terraform Apply
+    - task: TerraformTaskV2@2
+      displayName: 'Apply'
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+        environmentServiceNameAzureRM: '$(serviceConn)'
 
 - stage: Build
   displayName: Build stage
