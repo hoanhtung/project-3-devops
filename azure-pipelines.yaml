@@ -25,7 +25,7 @@ stages:
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
               backendServiceArm: '$(serviceConn)'
               backendAzureRmResourceGroupName: 'Azuredevops'
-              backendAzureRmStorageAccountName: 'tungstorage4736'
+              backendAzureRmStorageAccountName: 'tungstorage12343'
               backendAzureRmContainerName: 'tungcontainer'
               backendAzureRmKey: 'terraform.tfstate'
 
@@ -35,7 +35,6 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'apply'
-              commandOptions: '-auto-approve'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
               environmentServiceNameAzureRM: '$(serviceConn)'
 
@@ -122,13 +121,13 @@ stages:
           archiveFile: '$(Build.ArtifactStagingDirectory)/selenium-$(Build.BuildId).zip'
       - task: CopyFilesOverSSH@0
         inputs:
-          sshEndpoint: 'hoanhtung-web'
+          sshEndpoint: 'hoanhtung-ssh'
           sourceFolder: '$(Build.ArtifactStagingDirectory)'
           contents: 'selenium-$(Build.BuildId).zip'
           readyTimeout: '20000'
       - task: SSH@0
         inputs:
-          sshEndpoint: 'hoanhtung-web'
+          sshEndpoint: 'hoanhtung-ssh'
           runOptions: 'commands'
           commands: |
             #! /bin/bash
