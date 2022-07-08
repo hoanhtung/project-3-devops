@@ -30,7 +30,7 @@ stages:
               backendAzureRmKey: 'terraform.tfstate'
 
           #Terraform Apply
-          - task: TerraformCLI@0
+          - task: TerraformTaskV2@2
             displayName: 'Apply'
             inputs:
               provider: 'azurerm'
