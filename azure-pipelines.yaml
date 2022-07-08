@@ -16,8 +16,7 @@ stages:
     pool: $(poolName)
     steps:
       #Terraform Init
-    - bash: ls $(projectRoot)
-
+    - checkout: self
     - task: TerraformTaskV2@2
       displayName: 'Initiation'
       inputs:
