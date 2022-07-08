@@ -1,7 +1,6 @@
 trigger:
 - main
 
-name: Azure Pipelines
 variables:
   projectRoot: $(System.DefaultWorkingDirectory)
   pythonVersion: '3.7.13'
@@ -67,6 +66,7 @@ stages:
       artifact: drop-selenium
 
 - stage: Deployment
+  displayName: Deployment stage
   jobs:
   - deployment: FakeRestAPI
     pool: $(poolName)
